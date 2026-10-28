@@ -1,0 +1,4684 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quiz Matematika V2 - Taqi musyaffa</title>
+
+<meta name="author" content="Taqi musyaffa">
+<meta name="creator" content="Taqi musyaffa">
+<meta name="copyright" content="© 2026 ">
+<meta name="description" content="Quiz Matematika interaktif dengan sistem level, combo, boss, power-up, endless mode, statistik dan leaderboard. Dibuat oleh Taqi musyaffa.">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial,sans-serif
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+    radial-gradient(circle at 10% 20%,rgba(59,130,246,.25),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(139,92,246,.25),transparent 30%),
+    #070b14;
+    color:white;
+    overflow-x:hidden;
+    transition:background .7s ease
+}
+
+/* ================= THEMES ================= */
+
+body.theme1{
+    background:
+    radial-gradient(circle at 10% 20%,rgba(59,130,246,.35),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(96,165,250,.25),transparent 30%),
+    #07111f;
+}
+
+body.theme2{
+    background:
+    radial-gradient(circle at 10% 20%,rgba(139,92,246,.35),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(192,132,252,.25),transparent 30%),
+    #10091d;
+}
+
+body.theme3{
+    background:
+    radial-gradient(circle at 10% 20%,rgba(16,185,129,.35),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(34,197,94,.25),transparent 30%),
+    #061713;
+}
+
+body.theme4{
+    background:
+    radial-gradient(circle at 10% 20%,rgba(249,115,22,.4),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(234,179,8,.25),transparent 30%),
+    #1a0d05;
+}
+
+body.theme5{
+    background:
+    radial-gradient(circle at 10% 20%,rgba(239,68,68,.4),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(220,38,38,.3),transparent 30%),
+    #1c0505;
+}
+
+body.themeEndless{
+    background:
+    radial-gradient(circle at 10% 20%,rgba(6,182,212,.4),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(14,116,144,.3),transparent 30%),
+    #031419;
+}
+
+body:before,
+body:after{
+    content:"";
+    position:fixed;
+    width:250px;
+    height:250px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.25;
+    pointer-events:none;
+    animation:float 8s infinite alternate ease-in-out
+}
+
+body:before{
+    background:#3b82f6;
+    top:-100px;
+    left:-100px
+}
+
+body:after{
+    background:#8b5cf6;
+    bottom:-100px;
+    right:-100px;
+    animation-delay:2s
+}
+
+.theme3:before{background:#10b981}
+.theme3:after{background:#22c55e}
+
+.theme4:before{background:#f97316}
+.theme4:after{background:#eab308}
+
+.theme5:before{background:#ef4444}
+.theme5:after{background:#dc2626}
+
+.themeEndless:before{background:#06b6d4}
+.themeEndless:after{background:#0e7490}
+
+
+/* ================= CONTAINER ================= */
+
+.container{
+    width:94%;
+    max-width:700px;
+    padding:28px;
+    border-radius:28px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.13);
+    backdrop-filter:blur(20px);
+    box-shadow:0 30px 80px rgba(0,0,0,.5);
+    position:relative;
+    z-index:2
+}
+
+.menu,
+.game-over{
+    animation:appear .5s ease
+}
+
+
+/* ================= LOGO ================= */
+
+.logo{
+    width:80px;
+    height:80px;
+    margin:0 auto 14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:23px;
+    font-size:40px;
+    background:linear-gradient(
+        135deg,
+        rgba(59,130,246,.35),
+        rgba(139,92,246,.35)
+    );
+    border:1px solid rgba(255,255,255,.15);
+    animation:logoFloat 3s infinite
+}
+
+
+/* ================= TITLE ================= */
+
+h1{
+    text-align:center;
+    font-size:40px;
+    margin:5px 0;
+    font-weight:900;
+    background:linear-gradient(
+        90deg,
+        #60a5fa,
+        #a78bfa,
+        #c084fc
+    );
+    color:transparent;
+    background-clip:text;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent
+}
+
+.subtitle{
+    text-align:center;
+    color:#aab7ca;
+    margin:8px 0 22px
+}
+
+
+/* ================= CARDS ================= */
+
+.menu-stats,
+.info,
+.stats{
+    display:grid;
+    gap:9px
+}
+
+.menu-stats{
+    grid-template-columns:repeat(3,1fr);
+    margin-bottom:15px
+}
+
+.card,
+.box,
+.stat,
+.settings,
+.leaderboard,
+.player-card,
+.powerups,
+.stat-panel{
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px
+}
+
+.card{
+    text-align:center;
+    padding:14px 5px
+}
+
+.card span{
+    display:block;
+    font-size:23px;
+    margin-bottom:5px
+}
+
+.card small{
+    color:#718096;
+    font-size:10px
+}
+
+
+/* ================= PLAYER ================= */
+
+.player-card{
+    padding:18px;
+    margin-bottom:12px
+}
+
+label{
+    display:block;
+    color:#94a3b8;
+    font-size:11px;
+    font-weight:bold;
+    letter-spacing:1px;
+    margin-bottom:8px
+}
+
+input,
+select{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(0,0,0,.3);
+    color:white;
+    outline:none;
+    font-size:16px
+}
+
+select option{
+    background:#111827;
+    color:white
+}
+
+input:focus,
+select:focus{
+    border-color:#60a5fa;
+    box-shadow:0 0 0 3px rgba(96,165,250,.08)
+}
+
+
+/* ================= BUTTON ================= */
+
+button{
+    width:100%;
+    padding:15px;
+    border:0;
+    border-radius:13px;
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+    box-shadow:0 8px 25px rgba(59,130,246,.2)
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 35px rgba(59,130,246,.35)
+}
+
+button:active{
+    transform:scale(.98)
+}
+
+
+/* ================= SETTINGS ================= */
+
+.settings{
+    padding:15px;
+    margin-bottom:12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px
+}
+
+.setting small{
+    display:block;
+    color:#64748b;
+    font-size:9px;
+    margin-bottom:6px;
+    font-weight:bold
+}
+
+
+/* ================= TIP ================= */
+
+.tip{
+    padding:12px;
+    border-radius:13px;
+    background:rgba(250,204,21,.06);
+    border:1px solid rgba(250,204,21,.1);
+    color:#cbd5e1;
+    font-size:12px;
+    margin-bottom:15px
+}
+
+
+/* ================= PROFILE ================= */
+
+.profile{
+    padding:15px;
+    border-radius:18px;
+    margin-bottom:15px;
+    background:linear-gradient(
+        135deg,
+        rgba(59,130,246,.1),
+        rgba(139,92,246,.1)
+    )
+}
+
+.profile-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center
+}
+
+.profile-level{
+    font-size:20px;
+    font-weight:900;
+    color:#a78bfa
+}
+
+.profile-stats{
+    color:#94a3b8;
+    font-size:11px
+}
+
+.xp-bg,
+.progress-bg,
+.combo-bg,
+.boss-bg{
+    height:8px;
+    background:#151e30;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:9px
+}
+
+.xp-bar,
+.progress,
+.combo-bar,
+.boss-bar{
+    height:100%;
+    width:0;
+    border-radius:20px;
+    background:linear-gradient(
+        90deg,
+        #3b82f6,
+        #8b5cf6,
+        #c084fc
+    );
+    transition:.4s
+}
+
+
+/* ================= PLAYER STATS ================= */
+
+.stat-panel{
+    padding:15px;
+    margin-bottom:15px
+}
+
+.stat-panel-title{
+    font-size:12px;
+    color:#a78bfa;
+    font-weight:bold;
+    margin-bottom:10px
+}
+
+.stat-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px
+}
+
+.stat-mini{
+    padding:10px;
+    border-radius:12px;
+    background:rgba(255,255,255,.04);
+    text-align:center
+}
+
+.stat-mini b{
+    display:block;
+    font-size:16px
+}
+
+.stat-mini small{
+    color:#64748b;
+    font-size:9px
+}
+
+
+/* ================= LEADERBOARD ================= */
+
+.leaderboard{
+    padding:18px;
+    margin-top:15px
+}
+
+.leader-title{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px
+}
+
+.leader-title h2{
+    font-size:18px;
+    margin:0
+}
+
+.leader-title span{
+    font-size:10px;
+    color:#64748b
+}
+
+.rank{
+    display:flex;
+    justify-content:space-between;
+    padding:11px;
+    margin:6px 0;
+    border-radius:11px;
+    background:rgba(255,255,255,.045)
+}
+
+.rank-name{
+    font-size:13px;
+    font-weight:bold
+}
+
+.rank-score{
+    color:#60a5fa;
+    font-weight:bold;
+    font-size:13px
+}
+
+.empty{
+    text-align:center;
+    color:#64748b;
+    font-size:12px;
+    padding:8px
+}
+
+
+/* ================= CREATOR ================= */
+
+.creator{
+    text-align:center;
+    color:#64748b;
+    font-size:10px;
+    margin-top:17px;
+    padding-top:13px;
+    border-top:1px solid rgba(255,255,255,.06)
+}
+
+.creator strong{
+    color:#94a3b8
+}
+
+
+/* ================= WATERMARK ================= */
+
+.watermark{
+    position:fixed;
+    bottom:12px;
+    right:18px;
+    z-index:50;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:1px;
+    color:rgba(255,255,255,.35);
+    pointer-events:none;
+    user-select:none;
+    text-shadow:0 1px 4px rgba(0,0,0,.6)
+}
+
+
+/* ================= GAME ================= */
+
+.game{
+    display:none
+}
+
+.game-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 14px;
+    border-radius:16px;
+    margin-bottom:14px;
+    background:linear-gradient(
+        135deg,
+        rgba(59,130,246,.1),
+        rgba(139,92,246,.1)
+    );
+    border:1px solid rgba(255,255,255,.08)
+}
+
+.player-mini{
+    display:flex;
+    align-items:center;
+    gap:9px
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    )
+}
+
+.player-mini small{
+    display:block;
+    color:#64748b;
+    font-size:9px
+}
+
+.player-mini strong{
+    font-size:13px
+}
+
+.badge{
+    padding:7px 10px;
+    border-radius:9px;
+    background:rgba(96,165,250,.1);
+    color:#93c5fd;
+    font-size:10px;
+    font-weight:bold
+}
+
+
+/* ================= INFO ================= */
+
+.info{
+    grid-template-columns:repeat(4,1fr);
+    margin-bottom:12px
+}
+
+.box{
+    text-align:center;
+    padding:12px 4px
+}
+
+.box small{
+    display:block;
+    color:#64748b;
+    font-size:9px;
+    margin-bottom:5px;
+    font-weight:bold
+}
+
+.box strong{
+    font-size:18px
+}
+
+#score{color:#60a5fa}
+#combo{color:#c084fc}
+#level{color:#a78bfa}
+
+
+/* ================= LIFE ================= */
+
+.life-panel{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 14px;
+    border-radius:13px;
+    background:rgba(0,0,0,.18);
+    border:1px solid rgba(255,255,255,.06);
+    margin-bottom:12px
+}
+
+.life-label{
+    color:#94a3b8;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:1px
+}
+
+.lives{
+    font-size:18px;
+    letter-spacing:2px
+}
+
+
+/* ================= POWERUPS ================= */
+
+.powerups{
+    padding:10px;
+    margin-bottom:12px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px
+}
+
+.powerup{
+    padding:9px 5px;
+    border-radius:12px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.07);
+    text-align:center;
+    cursor:pointer;
+    transition:.2s
+}
+
+.powerup:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,.08)
+}
+
+.powerup.disabled{
+    opacity:.3;
+    cursor:default
+}
+
+.powerup-icon{
+    font-size:21px
+}
+
+.powerup-name{
+    display:block;
+    font-size:8px;
+    color:#94a3b8;
+    margin-top:3px
+}
+
+.powerup-count{
+    font-size:12px;
+    font-weight:bold;
+    color:#facc15
+}
+
+
+/* ================= TIMER ================= */
+
+.timer-area{
+    display:flex;
+    justify-content:center;
+    position:relative;
+    margin:10px 0 17px
+}
+
+.timer{
+    width:112px;
+    height:112px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    background:conic-gradient(
+        #60a5fa 100%,
+        #1e293b 0%
+    );
+    box-shadow:0 0 35px rgba(96,165,250,.16)
+}
+
+.timer:before{
+    content:"";
+    position:absolute;
+    width:88px;
+    height:88px;
+    border-radius:50%;
+    background:#0d1423;
+    box-shadow:inset 0 0 20px rgba(0,0,0,.5)
+}
+
+.timer span{
+    position:relative;
+    font-size:30px;
+    font-weight:900
+}
+
+.warning{
+    animation:warning .5s infinite;
+    box-shadow:0 0 35px rgba(239,68,68,.45)
+}
+
+.warning span{
+    color:#fca5a5
+}
+
+.timer-label{
+    position:absolute;
+    bottom:-2px;
+    padding:4px 9px;
+    border-radius:7px;
+    background:#111827;
+    color:#64748b;
+    font-size:8px;
+    font-weight:bold
+}
+
+
+/* ================= PROGRESS ================= */
+
+.progress-info,
+.combo-info{
+    display:flex;
+    justify-content:space-between;
+    color:#64748b;
+    font-size:9px;
+    font-weight:bold;
+    margin-bottom:5px
+}
+
+.progress-wrapper{
+    margin-bottom:13px
+}
+
+.progress{
+    background:linear-gradient(
+        90deg,
+        #3b82f6,
+        #8b5cf6,
+        #c084fc
+    )
+}
+
+.combo-bar{
+    background:linear-gradient(
+        90deg,
+        #f59e0b,
+        #ef4444,
+        #c084fc
+    )
+}
+
+.combo-wrapper{
+    margin-bottom:15px
+}
+
+
+/* ================= QUESTION ================= */
+
+.question-label{
+    text-align:center;
+    color:#64748b;
+    font-size:9px;
+    letter-spacing:2px;
+    margin-bottom:7px
+}
+
+.question{
+    padding:32px 12px;
+    text-align:center;
+    font-size:36px;
+    font-weight:900;
+    border-radius:21px;
+    margin-bottom:15px;
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(96,165,250,.1),
+            transparent 55%
+        ),
+        rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    animation:question .35s ease
+}
+
+.answer-input{
+    text-align:center;
+    font-size:22px;
+    font-weight:bold
+}
+
+.answer-button{
+    margin-top:9px
+}
+
+.combo-message{
+    text-align:center;
+    min-height:22px;
+    color:#c084fc;
+    font-size:12px;
+    font-weight:bold;
+    margin-top:9px
+}
+
+.feedback{
+    text-align:center;
+    min-height:24px;
+    margin-top:6px;
+    font-weight:bold;
+    font-size:13px
+}
+
+
+/* ================= BOSS ================= */
+
+.boss{
+    display:none;
+    padding:15px;
+    margin-bottom:13px;
+    border-radius:18px;
+    background:linear-gradient(
+        135deg,
+        rgba(127,29,29,.3),
+        rgba(88,28,135,.25)
+    );
+    border:1px solid rgba(248,113,113,.2);
+    text-align:center
+}
+
+.boss-title{
+    font-size:18px;
+    font-weight:900;
+    color:#fca5a5
+}
+
+.boss-sub{
+    font-size:10px;
+    color:#94a3b8;
+    margin:3px 0
+}
+
+.boss-hp{
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    color:#fca5a5;
+    margin-top:8px
+}
+
+.boss-bar{
+    background:linear-gradient(
+        90deg,
+        #ef4444,
+        #f97316
+    );
+    width:100%
+}
+
+.boss-defeated{
+    opacity:.45;
+    filter:grayscale(.5)
+}
+
+
+/* ================= GAME OVER ================= */
+
+.game-over{
+    display:none;
+    text-align:center
+}
+
+.final-score{
+    font-size:52px;
+    font-weight:900;
+    margin:12px 0;
+    background:linear-gradient(
+        90deg,
+        #60a5fa,
+        #c084fc
+    );
+    color:transparent;
+    background-clip:text;
+    -webkit-background-clip:text
+}
+
+.stats{
+    grid-template-columns:repeat(3,1fr);
+    margin:17px 0
+}
+
+.stat{
+    padding:13px 4px
+}
+
+.stat small{
+    display:block;
+    color:#94a3b8;
+    margin-bottom:4px
+}
+
+.stat strong{
+    font-size:17px
+}
+
+
+/* ================= ACHIEVEMENT ================= */
+
+.achievement-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:7px;
+    margin:15px 0
+}
+
+.badge-item{
+    padding:10px;
+    border-radius:12px;
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.06);
+    font-size:11px
+}
+
+.locked{
+    opacity:.3
+}
+
+
+/* ================= OVERLAYS ================= */
+
+.level-up,
+.perfect,
+.critical,
+.achievement,
+.powerup-popup{
+    position:fixed;
+    z-index:100;
+    display:none
+}
+
+.level-up{
+    inset:0;
+    background:rgba(0,0,0,.78);
+    align-items:center;
+    justify-content:center
+}
+
+.level-box{
+    padding:40px;
+    border-radius:25px;
+    background:linear-gradient(
+        135deg,
+        #111827,
+        #1e1b4b
+    );
+    text-align:center;
+    box-shadow:0 0 60px rgba(139,92,246,.3)
+}
+
+.level-box h2{
+    font-size:36px;
+    margin:0
+}
+
+.perfect,
+.critical,
+.powerup-popup{
+    left:50%;
+    top:38%;
+    transform:translate(-50%,-50%);
+    font-size:34px;
+    font-weight:900;
+    text-shadow:0 0 30px currentColor;
+    white-space:nowrap
+}
+
+.perfect{
+    color:#facc15
+}
+
+.critical{
+    color:#fb923c
+}
+
+.powerup-popup{
+    color:#67e8f9;
+    font-size:25px
+}
+
+.achievement{
+    right:22px;
+    top:22px;
+    width:275px;
+    padding:14px;
+    border-radius:16px;
+    background:linear-gradient(
+        135deg,
+        rgba(30,41,59,.97),
+        rgba(49,46,129,.97)
+    );
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 15px 45px rgba(0,0,0,.45)
+}
+
+.achievement-icon{
+    float:left;
+    font-size:27px;
+    margin-right:10px
+}
+
+.achievement-title{
+    font-size:9px;
+    color:#facc15;
+    font-weight:bold;
+    letter-spacing:1px
+}
+
+.achievement-name{
+    font-size:15px;
+    font-weight:900;
+    margin-top:3px
+}
+
+.achievement-desc{
+    font-size:10px;
+    color:#94a3b8;
+    margin-top:2px
+}
+
+
+/* ================= ANIMATION ================= */
+
+@keyframes appear{
+    from{
+        opacity:0;
+        transform:translateY(15px)
+    }
+    to{
+        opacity:1;
+        transform:none
+    }
+}
+
+@keyframes question{
+    from{
+        opacity:0;
+        transform:scale(.96)
+    }
+    to{
+        opacity:1;
+        transform:none
+    }
+}
+
+@keyframes warning{
+    50%{
+        transform:scale(1.07)
+    }
+}
+
+@keyframes float{
+    to{
+        transform:translate(50px,30px)
+    }
+}
+
+@keyframes logoFloat{
+    50%{
+        transform:translateY(-6px)
+    }
+}
+
+@keyframes pop{
+    0%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(.5)
+    }
+
+    30%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1.15)
+    }
+
+    100%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(1.3)
+    }
+}
+
+.pop{
+    display:block!important;
+    animation:pop .9s ease forwards
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+    .container{
+        padding:20px;
+        border-radius:22px
+    }
+
+    h1{
+        font-size:30px
+    }
+
+    .menu-stats{
+        gap:6px
+    }
+
+    .card{
+        padding:11px 3px
+    }
+
+    .info{
+        grid-template-columns:repeat(2,1fr)
+    }
+
+    .question{
+        font-size:28px;
+        padding:28px 8px
+    }
+
+    .stats{
+        gap:6px
+    }
+
+    .settings{
+        grid-template-columns:1fr
+    }
+
+    .achievement{
+        left:50%;
+        right:auto;
+        transform:translateX(-50%);
+        width:90%
+    }
+
+    .powerups{
+        gap:5px
+    }
+
+    .powerup{
+        padding:7px 3px
+    }
+
+    .watermark{
+        font-size:8px;
+        bottom:7px;
+        right:8px
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+<!-- =====================================================
+     MENU
+===================================================== -->
+
+<div class="menu" id="menu">
+
+    <div class="logo">
+        🧠
+    </div>
+
+    <h1>
+        QUIZ MATEMATIKA
+    </h1>
+
+    <p class="subtitle">
+        Seberapa cepat otakmu menghitung?
+    </p>
+
+
+    <div class="menu-stats">
+
+        <div class="card">
+            <span>❤️</span>
+            <b>3 NYAWA</b>
+            <small>Kesempatan</small>
+        </div>
+
+        <div class="card">
+            <span>🎯</span>
+            <b>5 LEVEL+</b>
+            <small>Kesulitan</small>
+        </div>
+
+        <div class="card">
+            <span>👹</span>
+            <b>BOSS</b>
+            <small>Level 5</small>
+        </div>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <div class="profile">
+
+        <div class="profile-top">
+
+            <div>
+
+                <div class="profile-stats">
+                    PLAYER PROFILE
+                </div>
+
+                <div
+                    class="profile-level"
+                    id="playerLevel">
+
+                    LEVEL 1
+
+                </div>
+
+            </div>
+
+            <div style="font-size:28px">
+                ⭐
+            </div>
+
+        </div>
+
+
+        <div style="font-size:10px;color:#64748b;margin-top:7px">
+
+            XP
+            <span id="xpText">
+                0 / 100
+            </span>
+
+        </div>
+
+
+        <div class="xp-bg">
+
+            <div
+                class="xp-bar"
+                id="xpBar">
+            </div>
+
+        </div>
+
+
+        <div
+            style="font-size:10px;color:#94a3b8;margin-top:9px"
+            id="profileStats">
+
+            🎮 0 game • 🏆 0 best score • 🔥 x0 combo
+
+        </div>
+
+    </div>
+
+
+    <!-- PLAYER -->
+
+    <div class="player-card">
+
+        <label>
+            👤 NAMA PEMAIN
+        </label>
+
+        <input
+            id="namaPemain"
+            maxlength="15"
+            placeholder="Masukkan nama kamu..."
+            onkeydown="enterMulai(event)"
+        >
+
+    </div>
+
+
+    <!-- SETTINGS -->
+
+    <div class="settings">
+
+        <div class="setting">
+
+            <small>
+                🎮 GAME MODE
+            </small>
+
+            <select id="gameMode">
+
+                <option value="normal">
+                    🎯 NORMAL
+                </option>
+
+                <option value="speed">
+                    ⚡ SPEED RUN
+                </option>
+
+                <option value="hardcore">
+                    💀 HARDCORE
+                </option>
+
+                <option value="practice">
+                    🧠 PRACTICE
+                </option>
+
+                <option value="endless">
+                    ♾️ ENDLESS
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="setting">
+
+            <small>
+                🧩 TIPE SOAL
+            </small>
+
+            <select id="questionType">
+
+                <option value="mixed">
+                    🎲 MIXED
+                </option>
+
+                <option value="arithmetic">
+                    ➕ ARITMETIKA
+                </option>
+
+                <option value="algebra">
+                    🔤 ALJABAR
+                </option>
+
+                <option value="percent">
+                    💯 PERSEN
+                </option>
+
+                <option value="power">
+                    ⚡ PANGKAT
+                </option>
+
+                <option value="trick">
+                    🧠 TRICK QUESTION
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <button onclick="mulaiGame()">
+        🎮 MULAI GAME
+    </button>
+
+
+    <div class="tip">
+
+        💡 <b>Tips:</b>&nbsp;
+
+        Jawab cepat, jaga combo,
+        gunakan Power-Up,
+        dan jangan tertipu soal jebakan!
+
+    </div>
+
+
+    <!-- PLAYER STATS -->
+
+    <div class="stat-panel">
+
+        <div class="stat-panel-title">
+            📊 PLAYER STATISTICS
+        </div>
+
+        <div class="stat-grid">
+
+            <div class="stat-mini">
+                <b id="statGames">0</b>
+                <small>TOTAL GAME</small>
+            </div>
+
+            <div class="stat-mini">
+                <b id="statQuestions">0</b>
+                <small>TOTAL SOAL</small>
+            </div>
+
+            <div class="stat-mini">
+                <b id="statAccuracy">0%</b>
+                <small>AKURASI</small>
+            </div>
+
+            <div class="stat-mini">
+                <b id="statBestLevel">0</b>
+                <small>BEST LEVEL</small>
+            </div>
+
+            <div class="stat-mini">
+                <b id="statBestScore">0</b>
+                <small>BEST SCORE</small>
+            </div>
+
+            <div class="stat-mini">
+                <b id="statBestCombo">0</b>
+                <small>BEST COMBO</small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LEADERBOARD -->
+
+    <div class="leaderboard">
+
+        <div class="leader-title">
+
+            <h2>
+                🏆 LEADERBOARD
+            </h2>
+
+            <span>
+                TOP 10
+            </span>
+
+        </div>
+
+        <div id="leaderboardMenu"></div>
+
+    </div>
+
+
+    <div class="creator">
+
+        © 2026
+        <strong>Farid Syahputra</strong>
+        <br>
+        Quiz Matematika • Original Project
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     GAME
+===================================================== -->
+
+<div
+    class="game"
+    id="game">
+
+
+    <div class="game-header">
+
+        <div class="player-mini">
+
+            <div class="avatar">
+                🎮
+            </div>
+
+            <div>
+
+                <small>
+                    PLAYER
+                </small>
+
+                <strong id="namaGame">
+                    Pemain
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="badge"
+            id="modeBadge">
+
+            🎯 NORMAL
+
+        </div>
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div class="info">
+
+        <div class="box">
+
+            <small>
+                LEVEL
+            </small>
+
+            <strong id="level">
+                1
+            </strong>
+
+        </div>
+
+
+        <div class="box">
+
+            <small>
+                SKOR
+            </small>
+
+            <strong id="score">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="box">
+
+            <small>
+                COMBO
+            </small>
+
+            <strong id="combo">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="box">
+
+            <small>
+                SOAL
+            </small>
+
+            <strong id="nomorSoal">
+                1 / 5
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- LIVES -->
+
+    <div class="life-panel">
+
+        <span class="life-label">
+            LIVES
+        </span>
+
+        <div
+            class="lives"
+            id="lives">
+
+            ❤️ ❤️ ❤️
+
+        </div>
+
+    </div>
+
+
+    <!-- POWER UPS -->
+
+    <div class="powerups">
+
+        <div
+            class="powerup"
+            id="powerTime"
+            onclick="gunakanPowerUp('time')">
+
+            <div class="powerup-icon">
+                ⏱️
+            </div>
+
+            <span class="powerup-name">
+                +5 DETIK
+            </span>
+
+            <span
+                class="powerup-count"
+                id="powerTimeCount">
+
+                0
+
+            </span>
+
+        </div>
+
+
+        <div
+            class="powerup"
+            id="powerShield"
+            onclick="gunakanPowerUp('shield')">
+
+            <div class="powerup-icon">
+                🛡️
+            </div>
+
+            <span class="powerup-name">
+                SHIELD
+            </span>
+
+            <span
+                class="powerup-count"
+                id="powerShieldCount">
+
+                0
+
+            </span>
+
+        </div>
+
+
+        <div
+            class="powerup"
+            id="powerDouble"
+            onclick="gunakanPowerUp('double')">
+
+            <div class="powerup-icon">
+                ✖️
+            </div>
+
+            <span class="powerup-name">
+                x2 SCORE
+            </span>
+
+            <span
+                class="powerup-count"
+                id="powerDoubleCount">
+
+                0
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOSS -->
+
+    <div
+        class="boss"
+        id="boss">
+
+        <div class="boss-title">
+            👹 MATH BOSS
+        </div>
+
+        <div class="boss-sub">
+            Kalahkan boss dengan menjawab soal!
+        </div>
+
+        <div class="boss-hp">
+
+            <span>
+                HP BOSS
+            </span>
+
+            <span id="bossHpText">
+                100 / 100
+            </span>
+
+        </div>
+
+        <div class="boss-bg">
+
+            <div
+                class="boss-bar"
+                id="bossBar">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TIMER -->
+
+    <div class="timer-area">
+
+        <div
+            class="timer"
+            id="timerCircle">
+
+            <span id="timer">
+                10
+            </span>
+
+        </div>
+
+        <div class="timer-label">
+            TIME LEFT
+        </div>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+
+    <div class="progress-wrapper">
+
+        <div class="progress-info">
+
+            <span id="progressLabel">
+                PROGRESS LEVEL
+            </span>
+
+            <span id="progressText">
+                1 / 5
+            </span>
+
+        </div>
+
+        <div class="progress-bg">
+
+            <div
+                class="progress"
+                id="progress">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMBO -->
+
+    <div class="combo-wrapper">
+
+        <div class="combo-info">
+
+            <span>
+                🔥 COMBO POWER
+            </span>
+
+            <span id="comboBarText">
+                0 / 10
+            </span>
+
+        </div>
+
+        <div class="combo-bg">
+
+            <div
+                class="combo-bar"
+                id="comboBar">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="question-label">
+        SOLVE THIS
+    </div>
+
+
+    <div
+        class="question"
+        id="soal">
+
+        -
+
+    </div>
+
+
+    <label style="text-align:center">
+        MASUKKAN JAWABAN
+    </label>
+
+
+    <input
+        class="answer-input"
+        type="number"
+        id="jawaban"
+        placeholder="?"
+        onkeydown="tekanEnter(event)"
+    >
+
+
+    <button
+        class="answer-button"
+        onclick="cekJawaban()">
+
+        JAWAB SEKARANG →
+
+    </button>
+
+
+    <div
+        class="combo-message"
+        id="comboMessage">
+    </div>
+
+
+    <div
+        class="feedback"
+        id="feedback">
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     GAME OVER
+===================================================== -->
+
+<div
+    class="game-over"
+    id="gameOver">
+
+    <div class="logo">
+        🏆
+    </div>
+
+    <h1>
+        GAME OVER
+    </h1>
+
+    <p id="namaAkhir"></p>
+
+
+    <div
+        class="final-score"
+        id="skorAkhir">
+
+        0
+
+    </div>
+
+
+    <div id="rankAkhir"></div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <small>
+                BENAR
+            </small>
+
+            <strong id="benarAkhir">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <small>
+                SALAH
+            </small>
+
+            <strong id="salahAkhir">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <small>
+                AKURASI
+            </small>
+
+            <strong id="akurasiAkhir">
+                0%
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div
+        style="
+        padding:12px;
+        border-radius:15px;
+        background:rgba(255,255,255,.05);
+        margin-bottom:15px
+        ">
+
+        ⭐ <b id="xpAkhir">
+            +0 XP
+        </b>
+
+        <br>
+
+        <small
+            style="color:#94a3b8"
+            id="levelAkhir">
+
+            PLAYER LEVEL 1
+
+        </small>
+
+    </div>
+
+
+    <div
+        style="
+        padding:12px;
+        border-radius:15px;
+        background:rgba(255,255,255,.05);
+        margin-bottom:15px
+        ">
+
+        🏅 BEST COMBO:
+        <b id="comboAkhir">
+            x0
+        </b>
+
+        <br>
+
+        📈 BEST LEVEL:
+        <b id="levelBestAkhir">
+            1
+        </b>
+
+    </div>
+
+
+    <h3 style="margin-bottom:8px">
+        🏅 ACHIEVEMENTS
+    </h3>
+
+
+    <div
+        class="achievement-list"
+        id="achievementList">
+    </div>
+
+
+    <button onclick="mainLagi()">
+        🔄 MAIN LAGI
+    </button>
+
+
+    <div class="leaderboard">
+
+        <div class="leader-title">
+
+            <h2>
+                🏆 LEADERBOARD
+            </h2>
+
+            <span>
+                TOP 10
+            </span>
+
+        </div>
+
+        <div id="leaderboardGameOver"></div>
+
+    </div>
+
+
+    <div class="creator">
+
+        © 2026
+        <strong>Farid Syahputra</strong>
+        <br>
+        Original Project
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     WATERMARK
+===================================================== -->
+
+<div class="watermark">
+    Farid Syahputra • 2026
+</div>
+
+
+<!-- =====================================================
+     OVERLAYS
+===================================================== -->
+
+<div
+    class="level-up"
+    id="levelUp">
+
+    <div class="level-box">
+
+        <h2>
+            🚀 LEVEL UP!
+        </h2>
+
+        <p id="levelUpText">
+            LEVEL 2
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    class="perfect"
+    id="perfect">
+
+    ⚡ PERFECT STREAK! ⚡
+
+</div>
+
+
+<div
+    class="critical"
+    id="critical">
+
+    💥 CRITICAL! 💥
+
+</div>
+
+
+<div
+    class="powerup-popup"
+    id="powerupPopup">
+
+    POWER UP!
+
+</div>
+
+
+<div
+    class="achievement"
+    id="achievement">
+
+    <div
+        class="achievement-icon"
+        id="achievementIcon">
+
+        🏆
+
+    </div>
+
+    <div class="achievement-title">
+        ACHIEVEMENT UNLOCKED
+    </div>
+
+    <div
+        class="achievement-name"
+        id="achievementName">
+
+        COMBO KING
+
+    </div>
+
+    <div
+        class="achievement-desc"
+        id="achievementDesc">
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   DATA GAME
+===================================================== */
+
+let score=0;
+let lives=3;
+let combo=0;
+let maxCombo=0;
+let questionNumber=1;
+let level=1;
+
+let correctAnswer=0;
+
+let waktu=10;
+let maxWaktu=10;
+
+let timerInterval=null;
+let nextQuestionTimer=null;
+
+let sedangMenjawab=false;
+
+let benarTotal=0;
+let salahTotal=0;
+
+let namaPemain="";
+let mode="normal";
+let tipeSoal="mixed";
+
+let bossHP=100;
+let bossSudahKalah=false;
+
+let gameSudahSelesai=false;
+
+let totalQuestionsCurrent=0;
+
+let powerUps={
+    time:0,
+    shield:0,
+    double:0
+};
+
+let shieldAktif=false;
+let doubleScoreAktif=false;
+
+
+/* =====================================================
+   ACHIEVEMENTS
+===================================================== */
+
+const achievements={
+
+    first:{
+        icon:"🎯",
+        name:"FIRST BLOOD",
+        desc:"Jawab 1 soal dengan benar."
+    },
+
+    combo5:{
+        icon:"👑",
+        name:"COMBO KING",
+        desc:"Dapatkan combo x5."
+    },
+
+    speed:{
+        icon:"⚡",
+        name:"SPEED DEMON",
+        desc:"Jawab dengan sisa waktu 8 detik atau lebih."
+    },
+
+    combo10:{
+        icon:"🔥",
+        name:"UNSTOPPABLE",
+        desc:"Dapatkan combo x10."
+    },
+
+    score1000:{
+        icon:"🏆",
+        name:"MATH MASTER",
+        desc:"Capai 1000 poin."
+    },
+
+    boss:{
+        icon:"👹",
+        name:"BOSS SLAYER",
+        desc:"Kalahkan Math Boss."
+    },
+
+    survivor:{
+        icon:"❤️",
+        name:"SURVIVOR",
+        desc:"Selesaikan game dengan nyawa tersisa."
+    },
+
+    critical:{
+        icon:"💥",
+        name:"CRITICAL HIT",
+        desc:"Dapatkan Critical Answer."
+    },
+
+    endless10:{
+        icon:"♾️",
+        name:"ENDLESS WARRIOR",
+        desc:"Mencapai 10 soal dalam Endless Mode."
+    },
+
+    powerup:{
+        icon:"⚡",
+        name:"POWER PLAYER",
+        desc:"Gunakan Power-Up."
+    }
+
+};
+
+let unlocked=[];
+
+
+/* =====================================================
+   PLAYER DATA
+===================================================== */
+
+function ambilStats(){
+
+    return JSON.parse(
+        localStorage.getItem("quizPlayerStats")
+    ) || {
+
+        games:0,
+        totalCorrect:0,
+        totalWrong:0,
+        totalQuestions:0,
+
+        bestScore:0,
+        bestCombo:0,
+        bestLevel:0,
+        bestAccuracy:0,
+
+        xp:0,
+        playerLevel:1
+
+    };
+
+}
+
+
+function simpanStats(data){
+
+    localStorage.setItem(
+        "quizPlayerStats",
+        JSON.stringify(data)
+    );
+
+}
+
+
+function updateProfile(){
+
+    const s=ambilStats();
+
+    const levelPlayer=s.playerLevel;
+
+    const xpDalamLevel=s.xp;
+
+    const xpButuh=levelPlayer*100;
+
+
+    document.getElementById("playerLevel").innerText=
+        "LEVEL "+levelPlayer;
+
+
+    document.getElementById("xpText").innerText=
+        `${xpDalamLevel} / ${xpButuh}`;
+
+
+    document.getElementById("xpBar").style.width=
+        Math.min(
+            (xpDalamLevel/xpButuh)*100,
+            100
+        )+"%";
+
+
+    document.getElementById("profileStats").innerText=
+        `🎮 ${s.games} game • 🏆 ${s.bestScore} best score • 🔥 x${s.bestCombo} combo`;
+
+
+    document.getElementById("statGames").innerText=
+        s.games;
+
+
+    document.getElementById("statQuestions").innerText=
+        s.totalQuestions || 0;
+
+
+    const total=s.totalCorrect+s.totalWrong;
+
+    const accuracy=total===0
+        ? 0
+        : Math.round(
+            (s.totalCorrect/total)*100
+        );
+
+
+    document.getElementById("statAccuracy").innerText=
+        accuracy+"%";
+
+
+    document.getElementById("statBestLevel").innerText=
+        s.bestLevel || 0;
+
+
+    document.getElementById("statBestScore").innerText=
+        s.bestScore;
+
+
+    document.getElementById("statBestCombo").innerText=
+        "x"+s.bestCombo;
+
+}
+
+
+/* =====================================================
+   LEADERBOARD
+===================================================== */
+
+function ambilLeaderboard(){
+
+    return JSON.parse(
+        localStorage.getItem("quizLeaderboard")
+    ) || [];
+
+}
+
+
+function simpanScore(){
+
+    let data=ambilLeaderboard();
+
+    data.push({
+
+        nama:namaPemain,
+        skor:score
+
+    });
+
+
+    data.sort(
+        (a,b)=>b.skor-a.skor
+    );
+
+
+    localStorage.setItem(
+        "quizLeaderboard",
+        JSON.stringify(
+            data.slice(0,10)
+        )
+    );
+
+}
+
+
+function escapeHTML(text){
+
+    return text
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function tampilkanLeaderboard(id){
+
+    const el=document.getElementById(id);
+
+    if(!el)
+        return;
+
+
+    const data=ambilLeaderboard();
+
+
+    if(!data.length){
+
+        el.innerHTML=
+            '<div class="empty">Belum ada skor. Jadilah yang pertama! 🚀</div>';
+
+        return;
+
+    }
+
+
+    let html="";
+
+
+    data.forEach((item,index)=>{
+
+        let medal;
+
+
+        if(index===0)
+            medal="🥇";
+
+        else if(index===1)
+            medal="🥈";
+
+        else if(index===2)
+            medal="🥉";
+
+        else
+            medal=(index+1)+".";
+
+
+        html+=`
+
+            <div class="rank">
+
+                <span class="rank-name">
+
+                    ${medal}
+                    ${escapeHTML(item.nama)}
+
+                </span>
+
+                <span class="rank-score">
+
+                    ${item.skor} pts
+
+                </span>
+
+            </div>
+
+        `;
+
+    });
+
+
+    el.innerHTML=html;
+
+}
+
+
+/* =====================================================
+   SOUND
+===================================================== */
+
+function bunyi(type){
+
+    try{
+
+        const audio=new AudioContext();
+
+        const osc=audio.createOscillator();
+
+        const gain=audio.createGain();
+
+
+        if(type==="correct"){
+
+            osc.type="sine";
+
+            osc.frequency.setValueAtTime(
+                600,
+                audio.currentTime
+            );
+
+            osc.frequency.exponentialRampToValueAtTime(
+                1000,
+                audio.currentTime+.2
+            );
+
+        }
+
+
+        else if(type==="wrong"){
+
+            osc.type="sawtooth";
+
+            osc.frequency.setValueAtTime(
+                300,
+                audio.currentTime
+            );
+
+            osc.frequency.exponentialRampToValueAtTime(
+                100,
+                audio.currentTime+.3
+            );
+
+        }
+
+
+        else if(type==="critical"){
+
+            osc.type="square";
+
+            osc.frequency.setValueAtTime(
+                500,
+                audio.currentTime
+            );
+
+            osc.frequency.exponentialRampToValueAtTime(
+                1400,
+                audio.currentTime+.3
+            );
+
+        }
+
+
+        else if(type==="boss"){
+
+            osc.type="square";
+
+            osc.frequency.setValueAtTime(
+                180,
+                audio.currentTime
+            );
+
+            osc.frequency.exponentialRampToValueAtTime(
+                800,
+                audio.currentTime+.5
+            );
+
+        }
+
+
+        else if(type==="power"){
+
+            osc.type="triangle";
+
+            osc.frequency.setValueAtTime(
+                400,
+                audio.currentTime
+            );
+
+            osc.frequency.exponentialRampToValueAtTime(
+                1200,
+                audio.currentTime+.3
+            );
+
+        }
+
+
+        else if(type==="tick"){
+
+            osc.type="sine";
+
+            osc.frequency.value=900;
+
+        }
+
+
+        else{
+
+            osc.type="sine";
+
+            osc.frequency.value=900;
+
+        }
+
+
+        gain.gain.setValueAtTime(
+            .2,
+            audio.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            .01,
+            audio.currentTime+.35
+        );
+
+
+        osc.connect(gain);
+
+        gain.connect(audio.destination);
+
+        osc.start();
+
+        osc.stop(
+            audio.currentTime+.35
+        );
+
+    }
+
+    catch(e){}
+
+}
+
+
+/* =====================================================
+   ACHIEVEMENT
+===================================================== */
+
+function unlock(id){
+
+    if(unlocked.includes(id))
+        return;
+
+
+    unlocked.push(id);
+
+
+    const a=achievements[id];
+
+
+    if(!a)
+        return;
+
+
+    document.getElementById("achievementIcon").innerText=
+        a.icon;
+
+
+    document.getElementById("achievementName").innerText=
+        a.name;
+
+
+    document.getElementById("achievementDesc").innerText=
+        a.desc;
+
+
+    const box=
+        document.getElementById("achievement");
+
+
+    box.style.display="block";
+
+
+    setTimeout(()=>{
+
+        box.style.display="none";
+
+    },3000);
+
+}
+
+
+function cekAchievements(){
+
+    if(benarTotal>=1)
+        unlock("first");
+
+
+    if(combo>=5)
+        unlock("combo5");
+
+
+    if(combo>=10)
+        unlock("combo10");
+
+
+    if(waktu>=8)
+        unlock("speed");
+
+
+    if(score>=1000)
+        unlock("score1000");
+
+
+    if(maxCombo>=5)
+        unlock("combo5");
+
+
+    if(mode==="endless" && questionNumber>=10)
+        unlock("endless10");
+
+}
+
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+function popup(id){
+
+    const el=document.getElementById(id);
+
+
+    if(!el)
+        return;
+
+
+    el.classList.remove("pop");
+
+
+    void el.offsetWidth;
+
+
+    el.classList.add("pop");
+
+}
+
+
+/* =====================================================
+   THEME
+===================================================== */
+
+function updateTheme(){
+
+    document.body.classList.remove(
+        "theme1",
+        "theme2",
+        "theme3",
+        "theme4",
+        "theme5",
+        "themeEndless"
+    );
+
+
+    if(mode==="endless" && level>5){
+
+        document.body.classList.add(
+            "themeEndless"
+        );
+
+        return;
+
+    }
+
+
+    const themeLevel=
+        Math.min(level,5);
+
+
+    document.body.classList.add(
+        "theme"+themeLevel
+    );
+
+}
+
+
+/* =====================================================
+   GAME MODE
+===================================================== */
+
+function setupMode(){
+
+    if(mode==="speed"){
+
+        maxWaktu=7;
+        lives=3;
+
+    }
+
+    else if(mode==="hardcore"){
+
+        maxWaktu=6;
+        lives=1;
+
+    }
+
+    else if(mode==="practice"){
+
+        maxWaktu=999;
+        lives=999;
+
+    }
+
+    else if(mode==="endless"){
+
+        maxWaktu=9;
+        lives=3;
+
+    }
+
+    else{
+
+        maxWaktu=10;
+        lives=3;
+
+    }
+
+}
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+function mulaiGame(){
+
+    namaPemain=
+        document.getElementById("namaPemain")
+        .value.trim();
+
+
+    if(!namaPemain){
+
+        alert(
+            "Masukkan nama dulu cuk 😭"
+        );
+
+
+        document.getElementById("namaPemain")
+            .focus();
+
+
+        return;
+
+    }
+
+
+    mode=
+        document.getElementById("gameMode")
+        .value;
+
+
+    tipeSoal=
+        document.getElementById("questionType")
+        .value;
+
+
+    score=0;
+
+    combo=0;
+
+    maxCombo=0;
+
+    questionNumber=1;
+
+    level=1;
+
+    benarTotal=0;
+
+    salahTotal=0;
+
+    totalQuestionsCurrent=0;
+
+    unlocked=[];
+
+    bossHP=100;
+
+    bossSudahKalah=false;
+
+    gameSudahSelesai=false;
+
+    shieldAktif=false;
+
+    doubleScoreAktif=false;
+
+
+    powerUps={
+        time:0,
+        shield:0,
+        double:0
+    };
+
+
+    clearInterval(timerInterval);
+
+    clearTimeout(nextQuestionTimer);
+
+
+    setupMode();
+
+
+    document.getElementById("namaGame").innerText=
+        namaPemain;
+
+
+    const badge={
+
+        normal:"🎯 NORMAL",
+
+        speed:"⚡ SPEED RUN",
+
+        hardcore:"💀 HARDCORE",
+
+        practice:"🧠 PRACTICE",
+
+        endless:"♾️ ENDLESS"
+
+    };
+
+
+    document.getElementById("modeBadge").innerText=
+        badge[mode];
+
+
+    document.getElementById("menu").style.display=
+        "none";
+
+
+    document.getElementById("gameOver").style.display=
+        "none";
+
+
+    document.getElementById("game").style.display=
+        "block";
+
+
+    document.getElementById("boss").style.display=
+        "none";
+
+
+    document.getElementById("boss")
+        .classList.remove("boss-defeated");
+
+
+    updatePowerUps();
+
+    updateTheme();
+
+    buatSoal();
+
+}
+
+
+/* =====================================================
+   BUAT SOAL
+===================================================== */
+
+function buatSoal(){
+
+    if(gameSudahSelesai)
+        return;
+
+
+    /* LEVEL */
+
+    if(mode==="endless"){
+
+        level=
+            Math.floor(
+                (questionNumber-1)/5
+            )+1;
+
+    }
+
+    else{
+
+        level=Math.min(
+            Math.floor(
+                (questionNumber-1)/5
+            )+1,
+            5
+        );
+
+    }
+
+
+    updateTheme();
+
+
+    if(
+        level>1 &&
+        questionNumber%5===1
+    ){
+
+        tampilkanLevelUp();
+
+    }
+
+
+    /* BOSS */
+
+    if(level===5 && !bossSudahKalah){
+
+        document.getElementById("boss")
+            .style.display="block";
+
+        updateBoss();
+
+    }
+
+    else if(level===5 && bossSudahKalah){
+
+        document.getElementById("boss")
+            .style.display="block";
+
+        document.getElementById("boss")
+            .classList.add("boss-defeated");
+
+    }
+
+    else{
+
+        document.getElementById("boss")
+            .style.display="none";
+
+    }
+
+
+    buatSoalVariatif();
+
+
+    sedangMenjawab=false;
+
+
+    document.getElementById("jawaban")
+        .value="";
+
+
+    document.getElementById("feedback")
+        .innerText="";
+
+
+    document.getElementById("comboMessage")
+        .innerText="";
+
+
+    totalQuestionsCurrent++;
+
+
+    updateTampilan();
+
+
+    mulaiTimer();
+
+
+    setTimeout(()=>{
+
+        const input=
+            document.getElementById("jawaban");
+
+
+        if(input && !gameSudahSelesai)
+            input.focus();
+
+    },50);
+
+}
+
+
+/* =====================================================
+   SOAL VARIATIF
+===================================================== */
+
+function buatSoalVariatif(){
+
+    let tipe=tipeSoal;
+
+
+    if(tipe==="mixed"){
+
+        tipe=randomChoice([
+
+            "arithmetic",
+            "algebra",
+            "percent",
+            "power",
+            "trick"
+
+        ]);
+
+    }
+
+
+    let a,b,c,d;
+
+
+    /* ================= ARITMETIKA ================= */
+
+    if(tipe==="arithmetic"){
+
+        if(level===1){
+
+            a=random(5,30);
+
+            b=random(2,20);
+
+            const op=
+                randomChoice([
+                    "+",
+                    "-",
+                    "×"
+                ]);
+
+
+            if(op==="+")
+                correctAnswer=a+b;
+
+            else if(op==="-")
+                correctAnswer=a-b;
+
+            else
+                correctAnswer=a*b;
+
+
+            tampilkanSoal(
+                `${a} ${op} ${b} = ?`
+            );
+
+        }
+
+
+        else if(level===2){
+
+            a=random(20,80);
+
+            b=random(2,20);
+
+            const op=
+                randomChoice([
+                    "+",
+                    "-",
+                    "×"
+                ]);
+
+
+            if(op==="+")
+                correctAnswer=a+b;
+
+            else if(op==="-")
+                correctAnswer=a-b;
+
+            else
+                correctAnswer=a*b;
+
+
+            tampilkanSoal(
+                `${a} ${op} ${b} = ?`
+            );
+
+        }
+
+
+        else if(level===3){
+
+            a=random(5,40);
+
+            b=random(2,15);
+
+            c=random(2,10);
+
+
+            const op=
+                randomChoice([
+                    "+",
+                    "-"
+                ]);
+
+
+            correctAnswer=
+                op==="+" 
+                ? a+(b*c)
+                : a-(b*c);
+
+
+            tampilkanSoal(
+                `${a} ${op} (${b} × ${c}) = ?`
+            );
+
+        }
+
+
+        else if(level===4){
+
+            a=random(10,50);
+
+            b=random(2,12);
+
+            c=random(2,10);
+
+
+            correctAnswer=
+                (a+b)*c;
+
+
+            tampilkanSoal(
+                `(${a} + ${b}) × ${c} = ?`
+            );
+
+        }
+
+
+        else{
+
+            a=random(
+                20,
+                40+(level*15)
+            );
+
+            b=random(
+                2,
+                15+(level*2)
+            );
+
+            c=random(
+                2,
+                12
+            );
+
+
+            correctAnswer=
+                a+(b*c)-c;
+
+
+            tampilkanSoal(
+                `${a} + (${b} × ${c}) − ${c} = ?`
+            );
+
+        }
+
+    }
+
+
+    /* ================= ALJABAR ================= */
+
+    else if(tipe==="algebra"){
+
+        a=random(
+            2,
+            Math.min(12+level,25)
+        );
+
+        b=random(
+            2,
+            20+level*5
+        );
+
+        const x=random(
+            2,
+            15+level*2
+        );
+
+
+        const hasil=
+            (a*x)+b;
+
+
+        correctAnswer=x;
+
+
+        tampilkanSoal(
+
+            `${a}x + ${b} = ${hasil}`+
+
+            `<br>
+
+            <small style="
+                font-size:14px;
+                color:#64748b
+            ">
+                Cari nilai x
+            </small>`
+
+        );
+
+    }
+
+
+    /* ================= PERSEN ================= */
+
+    else if(tipe==="percent"){
+
+        const persen=
+            randomChoice([
+                10,
+                20,
+                25,
+                30,
+                40,
+                50,
+                60,
+                75
+            ]);
+
+
+        const angka=
+            random(
+                4,
+                20+level*5
+            )*10;
+
+
+        correctAnswer=
+            (angka*persen)/100;
+
+
+        tampilkanSoal(
+            `${persen}% dari ${angka} = ?`
+        );
+
+    }
+
+
+    /* ================= PANGKAT ================= */
+
+    else if(tipe==="power"){
+
+        a=random(
+            2,
+            level>=4 ? 10 : 8
+        );
+
+
+        b=random(
+            2,
+            level>=5 ? 4 : 3
+        );
+
+
+        correctAnswer=
+            a**b;
+
+
+        tampilkanSoal(
+            `${a}<sup>${b}</sup> = ?`
+        );
+
+    }
+
+
+    /* ================= TRICK ================= */
+
+    else{
+
+        buatSoalTrick();
+
+    }
+
+}
+
+
+/* =====================================================
+   TRICK QUESTIONS
+===================================================== */
+
+function buatSoalTrick(){
+
+    const jenis=random(1,7);
+
+    let a,b,c;
+
+
+    /* 1 */
+
+    if(jenis===1){
+
+        a=random(
+            5,
+            20+level*5
+        );
+
+        b=random(2,12);
+
+        c=random(2,8);
+
+
+        correctAnswer=
+            a+(b*c);
+
+
+        tampilkanSoal(
+            `${a} + ${b} × ${c} = ?`
+        );
+
+    }
+
+
+    /* 2 */
+
+    else if(jenis===2){
+
+        a=random(5,20);
+
+        b=random(2,10);
+
+        c=random(2,8);
+
+
+        correctAnswer=
+            (a+b)*c;
+
+
+        tampilkanSoal(
+            `(${a} + ${b}) × ${c} = ?`
+        );
+
+    }
+
+
+    /* 3 */
+
+    else if(jenis===3){
+
+        a=random(20,60);
+
+        b=random(2,10);
+
+        c=random(2,8);
+
+
+        correctAnswer=
+            a-(b*c);
+
+
+        tampilkanSoal(
+            `${a} − ${b} × ${c} = ?`
+        );
+
+    }
+
+
+    /* 4 */
+
+    else if(jenis===4){
+
+        a=random(10,30);
+
+        b=random(2,10);
+
+
+        correctAnswer=
+            (a+b)-a;
+
+
+        tampilkanSoal(
+            `(${a} + ${b}) − ${a} = ?`
+        );
+
+    }
+
+
+    /* 5 */
+
+    else if(jenis===5){
+
+        a=random(2,10);
+
+        b=random(2,8);
+
+        c=random(2,5);
+
+
+        correctAnswer=
+            a*(b+c);
+
+
+        tampilkanSoal(
+            `${a} × (${b} + ${c}) = ?`
+        );
+
+    }
+
+
+    /* 6 */
+
+    else if(jenis===6){
+
+        a=random(10,30);
+
+        b=random(2,8);
+
+        c=random(2,5);
+
+
+        correctAnswer=
+            (a*b)-c;
+
+
+        tampilkanSoal(
+            `${a} × ${b} − ${c} = ?`
+        );
+
+    }
+
+
+    /* 7 */
+
+    else{
+
+        a=random(5,20);
+
+        b=random(2,10);
+
+        c=random(2,6);
+
+
+        correctAnswer=
+            a+b*c-a;
+
+
+        tampilkanSoal(
+            `${a} + ${b} × ${c} − ${a} = ?`
+        );
+
+    }
+
+}
+
+
+function tampilkanSoal(teks){
+
+    document.getElementById("soal")
+        .innerHTML=teks;
+
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function mulaiTimer(){
+
+    clearInterval(timerInterval);
+
+
+    waktu=maxWaktu;
+
+
+    updateTimer();
+
+
+    if(mode==="practice")
+        return;
+
+
+    timerInterval=setInterval(()=>{
+
+        if(gameSudahSelesai){
+
+            clearInterval(timerInterval);
+
+            return;
+
+        }
+
+
+        waktu--;
+
+
+        updateTimer();
+
+
+        if(waktu<=3 && waktu>0){
+
+            bunyi("tick");
+
+        }
+
+
+        if(waktu<=0){
+
+            clearInterval(timerInterval);
+
+            waktuHabis();
+
+        }
+
+    },1000);
+
+}
+
+
+/* =====================================================
+   UPDATE TIMER
+===================================================== */
+
+function updateTimer(){
+
+    const timer=
+        document.getElementById("timer");
+
+
+    const circle=
+        document.getElementById("timerCircle");
+
+
+    if(!timer || !circle)
+        return;
+
+
+    timer.innerText=
+        mode==="practice"
+        ? "∞"
+        : waktu;
+
+
+    if(mode==="practice"){
+
+        circle.style.background=
+            "conic-gradient(#60a5fa 100%,#1e293b 0%)";
+
+
+        circle.classList.remove(
+            "warning"
+        );
+
+
+        return;
+
+    }
+
+
+    const persen=
+        Math.max(
+            (waktu/maxWaktu)*100,
+            0
+        );
+
+
+    circle.style.background=
+        `conic-gradient(
+            #60a5fa ${persen}%,
+            #1e293b ${persen}%
+        )`;
+
+
+    circle.classList.toggle(
+        "warning",
+        waktu<=3
+    );
+
+}
+
+
+/* =====================================================
+   POWER UP SYSTEM
+===================================================== */
+
+function updatePowerUps(){
+
+    document.getElementById(
+        "powerTimeCount"
+    ).innerText=powerUps.time;
+
+
+    document.getElementById(
+        "powerShieldCount"
+    ).innerText=powerUps.shield;
+
+
+    document.getElementById(
+        "powerDoubleCount"
+    ).innerText=powerUps.double;
+
+
+    document.getElementById(
+        "powerTime"
+    ).classList.toggle(
+        "disabled",
+        powerUps.time<=0
+    );
+
+
+    document.getElementById(
+        "powerShield"
+    ).classList.toggle(
+        "disabled",
+        powerUps.shield<=0
+    );
+
+
+    document.getElementById(
+        "powerDouble"
+    ).classList.toggle(
+        "disabled",
+        powerUps.double<=0
+    );
+
+}
+
+
+function dapatkanPowerUp(){
+
+    const hadiah=
+        randomChoice([
+            "time",
+            "shield",
+            "double"
+        ]);
+
+
+    powerUps[hadiah]++;
+
+
+    updatePowerUps();
+
+
+    const data={
+
+        time:{
+            text:"⏱️ +5 DETIK DIDAPAT!",
+            icon:"⏱️"
+        },
+
+        shield:{
+            text:"🛡️ SHIELD DIDAPAT!",
+            icon:"🛡️"
+        },
+
+        double:{
+            text:"✖️ x2 SCORE DIDAPAT!",
+            icon:"✖️"
+        }
+
+    };
+
+
+    document.getElementById(
+        "powerupPopup"
+    ).innerText=
+        data[hadiah].text;
+
+
+    popup("powerupPopup");
+
+
+    bunyi("power");
+
+}
+
+
+function gunakanPowerUp(type){
+
+    if(gameSudahSelesai)
+        return;
+
+
+    if(sedangMenjawab)
+        return;
+
+
+    if(powerUps[type]<=0)
+        return;
+
+
+    powerUps[type]--;
+
+
+    unlock("powerup");
+
+
+    if(type==="time"){
+
+        waktu+=5;
+
+
+        if(waktu>maxWaktu)
+            waktu=maxWaktu+5;
+
+
+        updateTimer();
+
+
+        document.getElementById(
+            "feedback"
+        ).innerText=
+            "⏱️ +5 DETIK!";
+
+
+    }
+
+
+    else if(type==="shield"){
+
+        shieldAktif=true;
+
+
+        document.getElementById(
+            "feedback"
+        ).innerText=
+            "🛡️ SHIELD AKTIF! Kesalahan berikutnya aman.";
+
+
+    }
+
+
+    else if(type==="double"){
+
+        doubleScoreAktif=true;
+
+
+        document.getElementById(
+            "feedback"
+        ).innerText=
+            "✖️ x2 SCORE AKTIF!";
+
+
+    }
+
+
+    bunyi("power");
+
+
+    updatePowerUps();
+
+}
+
+
+/* =====================================================
+   HANDLE DAMAGE
+===================================================== */
+
+function kenaDamage(){
+
+    if(mode==="practice")
+        return;
+
+
+    if(shieldAktif){
+
+        shieldAktif=false;
+
+
+        document.getElementById(
+            "feedback"
+        ).innerText=
+            "🛡️ SHIELD MENAHAN SERANGAN!";
+
+
+        return;
+
+    }
+
+
+    lives--;
+
+}
+
+
+/* =====================================================
+   TIME OUT
+===================================================== */
+
+function waktuHabis(){
+
+    if(sedangMenjawab)
+        return;
+
+
+    sedangMenjawab=true;
+
+
+    salahTotal++;
+
+
+    kenaDamage();
+
+
+    combo=0;
+
+
+    bunyi("wrong");
+
+
+    document.getElementById(
+        "feedback"
+    ).innerText=
+        `⏰ WAKTU HABIS! Jawaban: ${correctAnswer}`;
+
+
+    updateTampilan();
+
+
+    lanjutAtauGameOver();
+
+}
+
+
+/* =====================================================
+   CEK JAWABAN
+===================================================== */
+
+function cekJawaban(){
+
+    if(sedangMenjawab)
+        return;
+
+
+    const input=
+        document.getElementById("jawaban")
+        .value;
+
+
+    if(input==="")
+        return;
+
+
+    sedangMenjawab=true;
+
+
+    clearInterval(timerInterval);
+
+
+    const jawaban=Number(input);
+
+
+    if(jawaban===correctAnswer){
+
+        benarTotal++;
+
+
+        combo++;
+
+
+        if(combo>maxCombo)
+            maxCombo=combo;
+
+
+        let poin=
+            100+
+            (combo*10)+
+            (waktu*5);
+
+
+        /* CRITICAL */
+
+        if(Math.random()<.10){
+
+            poin*=2;
+
+
+            unlock("critical");
+
+
+            popup("critical");
+
+
+            bunyi("critical");
+
+        }
+
+        else{
+
+            bunyi("correct");
+
+        }
+
+
+        /* DOUBLE SCORE POWER */
+
+        if(doubleScoreAktif){
+
+            poin*=2;
+
+            doubleScoreAktif=false;
+
+            document.getElementById(
+                "comboMessage"
+            ).innerText=
+                "✖️ x2 SCORE AKTIF!";
+
+        }
+
+
+        score+=poin;
+
+
+        document.getElementById(
+            "feedback"
+        ).innerText=
+            `✅ BENAR! +${poin} poin`;
+
+
+        if(combo>=3){
+
+            document.getElementById(
+                "comboMessage"
+            ).innerText=
+                `🔥 ${combo} COMBO!`;
+
+        }
+
+
+        if(combo>=5){
+
+            popup("perfect");
+
+        }
+
+
+        /* POWER UP */
+
+        if(benarTotal%5===0){
+
+            dapatkanPowerUp();
+
+        }
+
+
+        /* BOSS */
+
+        if(
+            level===5 &&
+            !bossSudahKalah
+        ){
+
+            bossHP-=20;
+
+
+            if(bossHP<0)
+                bossHP=0;
+
+
+            updateBoss();
+
+
+            if(bossHP<=0){
+
+                bossSudahKalah=true;
+
+
+                unlock("boss");
+
+
+                bunyi("boss");
+
+
+                document.getElementById(
+                    "feedback"
+                ).innerText=
+                    `👹 BOSS KALAH! +500 BONUS!`;
+
+
+                score+=500;
+
+
+                document.getElementById(
+                    "boss"
+                ).classList.add(
+                    "boss-defeated"
+                );
+
+            }
+
+        }
+
+
+        cekAchievements();
+
+    }
+
+
+    else{
+
+        salahTotal++;
+
+
+        const sebelum=lives;
+
+
+        kenaDamage();
+
+
+        combo=0;
+
+
+        bunyi("wrong");
+
+
+        if(shieldAktif===false && lives<sebelum){
+
+            document.getElementById(
+                "feedback"
+            ).innerText=
+                `❌ SALAH! Jawaban: ${correctAnswer}`;
+
+        }
+
+        else{
+
+            document.getElementById(
+                "feedback"
+            ).innerText=
+                `❌ SALAH! Jawaban: ${correctAnswer}`;
+
+        }
+
+
+        document.getElementById(
+            "comboMessage"
+        ).innerText=
+            "💥 COMBO TERPUTUS!";
+
+    }
+
+
+    updateTampilan();
+
+
+    lanjutAtauGameOver();
+
+}
+
+
+/* =====================================================
+   NEXT / GAME OVER
+===================================================== */
+
+function lanjutAtauGameOver(){
+
+    clearTimeout(nextQuestionTimer);
+
+
+    nextQuestionTimer=setTimeout(()=>{
+
+        if(gameSudahSelesai)
+            return;
+
+
+        if(lives<=0){
+
+            gameOver();
+
+            return;
+
+        }
+
+
+        questionNumber++;
+
+
+        buatSoal();
+
+
+    },800);
+
+}
+
+
+/* =====================================================
+   BOSS
+===================================================== */
+
+function updateBoss(){
+
+    const hpText=
+        document.getElementById("bossHpText");
+
+
+    const hpBar=
+        document.getElementById("bossBar");
+
+
+    if(!hpText || !hpBar)
+        return;
+
+
+    hpText.innerText=
+        `${bossHP} / 100`;
+
+
+    hpBar.style.width=
+        bossHP+"%";
+
+}
+
+
+/* =====================================================
+   COMBO BAR
+===================================================== */
+
+function updateComboBar(){
+
+    const max=10;
+
+
+    const persen=
+        Math.min(
+            (combo/max)*100,
+            100
+        );
+
+
+    document.getElementById(
+        "comboBar"
+    ).style.width=
+        persen+"%";
+
+
+    document.getElementById(
+        "comboBarText"
+    ).innerText=
+        `${Math.min(combo,max)} / ${max}`;
+
+}
+
+
+/* =====================================================
+   UPDATE DISPLAY
+===================================================== */
+
+function updateTampilan(){
+
+    document.getElementById(
+        "score"
+    ).innerText=score;
+
+
+    document.getElementById(
+        "combo"
+    ).innerText=combo;
+
+
+    document.getElementById(
+        "level"
+    ).innerText=level;
+
+
+    /* SOAL */
+
+    if(mode==="endless"){
+
+        document.getElementById(
+            "nomorSoal"
+        ).innerText=
+            "#"+questionNumber;
+
+
+        document.getElementById(
+            "progressText"
+        ).innerText=
+            `LEVEL ${level}`;
+
+
+        document.getElementById(
+            "progressLabel"
+        ).innerText=
+            "ENDLESS PROGRESS";
+
+
+        const nomor=
+            ((questionNumber-1)%5)+1;
+
+
+        document.getElementById(
+            "progress"
+        ).style.width=
+            (nomor/5)*100+"%";
+
+    }
+
+    else{
+
+        const nomor=
+            ((questionNumber-1)%5)+1;
+
+
+        document.getElementById(
+            "nomorSoal"
+        ).innerText=
+            `${nomor} / 5`;
+
+
+        document.getElementById(
+            "progressText"
+        ).innerText=
+            `${nomor} / 5`;
+
+
+        document.getElementById(
+            "progressLabel"
+        ).innerText=
+            "PROGRESS LEVEL";
+
+
+        document.getElementById(
+            "progress"
+        ).style.width=
+            (nomor/5)*100+"%";
+
+    }
+
+
+    /* LIVES */
+
+    if(mode==="practice"){
+
+        document.getElementById(
+            "lives"
+        ).innerText="∞";
+
+    }
+
+    else{
+
+        document.getElementById(
+            "lives"
+        ).innerText=
+            "❤️ ".repeat(
+                Math.max(lives,0)
+            );
+
+    }
+
+
+    updateComboBar();
+
+    updatePowerUps();
+
+}
+
+
+/* =====================================================
+   LEVEL UP
+===================================================== */
+
+function tampilkanLevelUp(){
+
+    const overlay=
+        document.getElementById("levelUp");
+
+
+    document.getElementById(
+        "levelUpText"
+    ).innerText=
+        `Sekarang kamu masuk LEVEL ${level}!`;
+
+
+    overlay.style.display="flex";
+
+
+    setTimeout(()=>{
+
+        overlay.style.display="none";
+
+    },1100);
+
+}
+
+
+/* =====================================================
+   GAME OVER
+===================================================== */
+
+function gameOver(){
+
+    if(gameSudahSelesai)
+        return;
+
+
+    gameSudahSelesai=true;
+
+
+    clearInterval(timerInterval);
+
+    clearTimeout(nextQuestionTimer);
+
+
+    if(lives>0)
+        unlock("survivor");
+
+
+    simpanScore();
+
+
+    /* XP */
+
+    let xpGain=
+        (benarTotal*10)+
+        Math.floor(score/50)+
+        (maxCombo*3);
+
+
+    let stats=ambilStats();
+
+
+    stats.games++;
+
+
+    stats.totalCorrect+=
+        benarTotal;
+
+
+    stats.totalWrong+=
+        salahTotal;
+
+
+    stats.totalQuestions=
+        (stats.totalQuestions || 0)+
+        totalQuestionsCurrent;
+
+
+    if(score>stats.bestScore)
+        stats.bestScore=score;
+
+
+    if(maxCombo>stats.bestCombo)
+        stats.bestCombo=maxCombo;
+
+
+    if(level>stats.bestLevel)
+        stats.bestLevel=level;
+
+
+    const total=
+        benarTotal+salahTotal;
+
+
+    const akurasi=
+        total===0
+        ? 0
+        : Math.round(
+            (benarTotal/total)*100
+        );
+
+
+    if(akurasi>stats.bestAccuracy)
+        stats.bestAccuracy=akurasi;
+
+
+    stats.xp+=xpGain;
+
+
+    while(
+        stats.xp>=
+        stats.playerLevel*100
+    ){
+
+        stats.xp-=
+            stats.playerLevel*100;
+
+
+        stats.playerLevel++;
+
+    }
+
+
+    simpanStats(stats);
+
+
+    document.getElementById(
+        "game"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "gameOver"
+    ).style.display="block";
+
+
+    document.getElementById(
+        "namaAkhir"
+    ).innerText=
+        "Pemain: "+namaPemain;
+
+
+    document.getElementById(
+        "skorAkhir"
+    ).innerText=
+        score;
+
+
+    document.getElementById(
+        "benarAkhir"
+    ).innerText=
+        benarTotal;
+
+
+    document.getElementById(
+        "salahAkhir"
+    ).innerText=
+        salahTotal;
+
+
+    document.getElementById(
+        "akurasiAkhir"
+    ).innerText=
+        akurasi+"%";
+
+
+    /* RANK */
+
+    let rank;
+
+
+    if(score>=5000)
+
+        rank=
+            "👑 GRAND MASTER MATEMATIKA";
+
+    else if(score>=3000)
+
+        rank=
+            "🔥 MASTER MATEMATIKA";
+
+    else if(score>=2000)
+
+        rank=
+            "⚡ JAGO MATEMATIKA";
+
+    else if(score>=1000)
+
+        rank=
+            "😎 LUMAYAN JAGO";
+
+    else
+
+        rank=
+            "📚 MASIH HARUS LATIHAN";
+
+
+    document.getElementById(
+        "rankAkhir"
+    ).innerText=
+        rank;
+
+
+    document.getElementById(
+        "xpAkhir"
+    ).innerText=
+        "+"+xpGain+" XP";
+
+
+    document.getElementById(
+        "levelAkhir"
+    ).innerText=
+        "PLAYER LEVEL "+stats.playerLevel;
+
+
+    document.getElementById(
+        "comboAkhir"
+    ).innerText=
+        "x"+maxCombo;
+
+
+    document.getElementById(
+        "levelBestAkhir"
+    ).innerText=
+        level;
+
+
+    tampilkanAchievementAkhir();
+
+
+    tampilkanLeaderboard(
+        "leaderboardGameOver"
+    );
+
+
+    updateProfile();
+
+}
+
+
+/* =====================================================
+   ACHIEVEMENT GAME OVER
+===================================================== */
+
+function tampilkanAchievementAkhir(){
+
+    const el=
+        document.getElementById(
+            "achievementList"
+        );
+
+
+    let html="";
+
+
+    Object.keys(achievements)
+        .forEach(id=>{
+
+        const a=achievements[id];
+
+
+        const sudah=
+            unlocked.includes(id);
+
+
+        html+=`
+
+            <div class="badge-item ${sudah?"":"locked"}">
+
+                ${sudah?a.icon:"🔒"}
+
+                <b>${a.name}</b>
+
+                <br>
+
+                <small>
+                    ${a.desc}
+                </small>
+
+            </div>
+
+        `;
+
+    });
+
+
+    el.innerHTML=html;
+
+}
+
+
+/* =====================================================
+   MAIN LAGI
+===================================================== */
+
+function mainLagi(){
+
+    clearInterval(timerInterval);
+
+    clearTimeout(nextQuestionTimer);
+
+
+    document.getElementById(
+        "gameOver"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "game"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "menu"
+    ).style.display="block";
+
+
+    document.body.classList.remove(
+        "theme1",
+        "theme2",
+        "theme3",
+        "theme4",
+        "theme5",
+        "themeEndless"
+    );
+
+
+    updateProfile();
+
+
+    tampilkanLeaderboard(
+        "leaderboardMenu"
+    );
+
+}
+
+
+/* =====================================================
+   ENTER
+===================================================== */
+
+function enterMulai(event){
+
+    if(event.key==="Enter")
+        mulaiGame();
+
+}
+
+
+function tekanEnter(event){
+
+    if(event.key==="Enter")
+        cekJawaban();
+
+}
+
+
+/* =====================================================
+   RANDOM
+===================================================== */
+
+function random(min,max){
+
+    return Math.floor(
+        Math.random()*(max-min+1)
+    )+min;
+
+}
+
+
+function randomChoice(array){
+
+    return array[
+        Math.floor(
+            Math.random()*array.length
+        )
+    ];
+
+}
+
+
+/* =====================================================
+   LOAD
+===================================================== */
+
+updateProfile();
+
+tampilkanLeaderboard(
+    "leaderboardMenu"
+);
+
+</script>
+
+</body>
+</html>
